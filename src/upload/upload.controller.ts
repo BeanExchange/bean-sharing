@@ -7,35 +7,28 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { v4 as uuidv4 } from 'uuid'; // To generate unique IDs for the images
 
-// No need to import `Multer` directly
 @Controller('upload')
 export class UploadController {
   @Post('photo')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: './uploads', // Folder where images will be saved
         filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          // Create a unique filename with original extension
           const fileExt = extname(file.originalname);
-          callback(null, `${file.fieldname}-${uniqueSuffix}${fileExt}`);
+          const filename = `${uuidv4()}${fileExt}`; // e.g., '123e4567-e89b-12d3-a456-426614174000.jpg'
+          callback(null, filename);
         },
       }),
-      fileFilter: (req, file, callback) => {
-        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
-          callback(null, true);
-        } else {
-          callback(new Error('Unsupported file type'), false);
-        }
-      },
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadPhoto(@UploadedFile() file: Express.Multer.File) {
     return {
-      message: 'File uploaded successfully!',
-      filename: file.filename,
+      message: 'Photo uploaded successfully',
+      id: file.filename, // Return the filename (unique ID) as the identifier
     };
   }
 }
