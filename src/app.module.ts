@@ -11,7 +11,7 @@ import { PositionModule } from './position/position.module';
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'), // Serve files from the uploads directory
-      serveRoot: '/images', // Access images via /images/filename.jpg
+      serveRoot: '/public', // Access images via /images/filename.jpg
     }),
     UploadModule,
     PositionModule,
