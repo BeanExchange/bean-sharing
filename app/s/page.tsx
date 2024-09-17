@@ -1,10 +1,9 @@
 // app/page.js
 'use server';
 import { Metadata } from 'next';
-import { permanentRedirect, ReadonlyURLSearchParams, redirect } from 'next/navigation';
 import SPage from '@/app/s/components/SPage';
 
-export async function generateMetadata({searchParams} : {searchParams: ReadonlyURLSearchParams}) {
+export async function generateMetadata({searchParams} : {searchParams: {id: string}}) {
   const {id} = searchParams;
 
   const linkWithId = `https://res.cloudinary.com/gmx-io/image/upload/gmx/${id}.jpg`
